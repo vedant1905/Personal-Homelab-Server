@@ -1,0 +1,55 @@
+# ==============================================================================
+# Caddyfile - Reverse Proxy Configuration
+# ==============================================================================
+# Global Options
+{
+    # Enable internal local certificate authority for local development (*.local)
+    # If using a public domain with valid DNS records, comment out the line below.
+    local_certs
+    auto_https disable_redirects
+}
+
+# Base Domain / Dashboard
+{$DOMAIN_NAME:homelab.local} {
+    reverse_proxy homepage:3000
+}
+
+# Homepage Dashboard
+homepage.{$DOMAIN_NAME:homelab.local} {
+    reverse_proxy homepage:3000
+}
+
+# Container Management (Dockge)
+dockge.{$DOMAIN_NAME:homelab.local} {
+    reverse_proxy dockge:5001
+}
+
+# DNS & Ad-blocking (AdGuard Home)
+adguard.{$DOMAIN_NAME:homelab.local} {
+    reverse_proxy adguardhome:3000
+}
+
+# Monitoring & Status (Uptime Kuma)
+uptime.{$DOMAIN_NAME:homelab.local} {
+    reverse_proxy uptime-kuma:3001
+}
+
+# Host Metrics (Glances)
+glances.{$DOMAIN_NAME:homelab.local} {
+    reverse_proxy glances:61208
+}
+
+# Password Vault (Vaultwarden)
+vault.{$DOMAIN_NAME:homelab.local} {
+    reverse_proxy vaultwarden:80
+}
+
+# File Browser
+files.{$DOMAIN_NAME:homelab.local} {
+    reverse_proxy filebrowser:80
+}
+
+# Media Streaming (Jellyfin)
+media.{$DOMAIN_NAME:homelab.local} {
+    reverse_proxy jellyfin:8096
+}

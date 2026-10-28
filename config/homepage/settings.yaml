@@ -1,0 +1,20 @@
+# ==============================================================================
+# Homepage Dashboard - Settings
+# ==============================================================================
+title: Personal Homelab
+favicon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/server.png
+theme: dark
+color: slate
+layout:
+  Core & Management:
+    style: row
+    columns: 3
+  Network & Security:
+    style: row
+    columns: 2
+  Storage & Vault:
+    style: row
+    columns: 2
+  Media & Streaming:
+    style: row
+    columns: 2

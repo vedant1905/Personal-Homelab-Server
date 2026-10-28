@@ -1,0 +1,25 @@
+# ==============================================================================
+# Personal Homelab Server - Main Orchestrator Compose File
+# ==============================================================================
+# Modern Docker Compose orchestrator supporting modular service stacks.
+# Run all stacks:         docker compose up -d
+# Run specific stack:     docker compose -f compose/core.yml up -d
+# ==============================================================================
+
+name: homelab
+
+include:
+  - path:
+      - compose/core.yml
+      - compose/network.yml
+      - compose/monitoring.yml
+      - compose/storage.yml
+      - compose/media.yml
+
+networks:
+  homelab_net:
+    name: homelab_net
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16

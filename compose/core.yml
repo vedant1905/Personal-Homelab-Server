@@ -1,0 +1,80 @@
+# ==============================================================================
+# Homelab Stack: Core Infrastructure
+# ==============================================================================
+# Services:
+# - Caddy: Lightweight Reverse Proxy with automatic HTTPS & HTTP/3
+# - Homepage: Fast, highly customizable application dashboard
+# - Dockge: Modern, intuitive Docker Compose manager UI
+# - Watchtower: Automated or monitor-mode container updater
+# ==============================================================================
+
+services:
+  caddy:
+    image: caddy:2-alpine
+    container_name: homelab_caddy
+    restart: unless-stopped
+    ports:
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+      - "${HTTPS_PORT:-443}:443/udp"
+    environment:
+      - DOMAIN_NAME=${DOMAIN_NAME:-homelab.local}
+      - ACME_EMAIL=${ACME_EMAIL:-admin@example.com}
+    volumes:
+      - ./config/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ${DATA_DIR:-./data}/caddy/data:/data
+      - ${DATA_DIR:-./data}/caddy/config:/config
+    networks:
+      - homelab_net
+
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homelab_homepage
+    restart: unless-stopped
+    ports:
+      - "${HOMEPAGE_PORT:-3000}:3000"
+    volumes:
+      - ./config/homepage:/app/config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-Etc/UTC}
+    networks:
+      - homelab_net
+
+  dockge:
+    image: louislam/dockge:1
+    container_name: homelab_dockge
+    restart: unless-stopped
+    ports:
+      - "${DOCKGE_PORT:-5001}:5001"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${DATA_DIR:-./data}/dockge/data:/app/data
+      - ./compose:/app/stacks
+    environment:
+      - DOCKGE_STACKS_DIR=/app/stacks
+      - TZ=${TZ:-Etc/UTC}
+    networks:
+      - homelab_net
+
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: homelab_watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_SCHEDULE=0 0 4 * * *  # Every night at 04:00 AM
+      - WATCHTOWER_INCLUDE_STOPPED=false
+      - WATCHTOWER_REVIVE_STOPPED=false
+      - WATCHTOWER_MONITOR_ONLY=true      # Set false to auto-update
+      - TZ=${TZ:-Etc/UTC}
+    networks:
+      - homelab_net
+
+networks:
+  homelab_net:
+    external: true

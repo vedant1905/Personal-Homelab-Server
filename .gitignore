@@ -1,0 +1,16 @@
+# Environment & secrets
+.env
+
+# Persistent service data
+data/
+!data/.gitkeep
+
+# Backup archives
+backups/*.tar.gz
+backups/*.zip
+
+# OS metadata
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini

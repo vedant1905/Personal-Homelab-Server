@@ -1,0 +1,15 @@
+# ==============================================================================
+# Homepage Dashboard - Widgets
+# ==============================================================================
+- search:
+    provider: duckduckgo
+    target: _blank
+
+- greeting:
+    text_size: 2xl
+    text: "Welcome to your Homelab"
+
+- resources:
+    cpu: true
+    memory: true
+    disk: /app/config

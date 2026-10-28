@@ -1,0 +1,16 @@
+# ==============================================================================
+# Homepage Dashboard - Bookmarks
+# ==============================================================================
+- Developer & Community:
+    - GitHub:
+        - icon: github.png
+          href: https://github.com/
+    - Docker Hub:
+        - icon: docker.png
+          href: https://hub.docker.com/
+    - r/selfhosted:
+        - icon: reddit.png
+          href: https://www.reddit.com/r/selfhosted/
+    - r/homelab:
+        - icon: reddit.png
+          href: https://www.reddit.com/r/homelab/

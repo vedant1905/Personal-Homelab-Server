@@ -1,0 +1,29 @@
+# ==============================================================================
+# Homelab Stack: Network Services & Local DNS
+# ==============================================================================
+# Services:
+# - AdGuard Home: Network-wide ad & tracker blocking, local DNS server
+# ==============================================================================
+
+services:
+  adguardhome:
+    image: adguard/adguardhome:latest
+    container_name: homelab_adguard
+    restart: unless-stopped
+    ports:
+      - "${ADGUARD_DNS_PORT:-53}:53/tcp"
+      - "${ADGUARD_DNS_PORT:-53}:53/udp"
+      - "${ADGUARD_WEB_PORT:-3001}:3000/tcp"
+      - "853:853/tcp"    # DNS over TLS
+      - "784:784/udp"    # DNS over QUIC
+    volumes:
+      - ${DATA_DIR:-./data}/adguard/work:/opt/adguardhome/work
+      - ${DATA_DIR:-./data}/adguard/conf:/opt/adguardhome/conf
+    environment:
+      - TZ=${TZ:-Etc/UTC}
+    networks:
+      - homelab_net
+
+networks:
+  homelab_net:
+    external: true

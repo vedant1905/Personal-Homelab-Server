@@ -1,0 +1,46 @@
+# ==============================================================================
+# Homelab Stack: Personal Storage & Password Management
+# ==============================================================================
+# Services:
+# - Vaultwarden: Lightweight Bitwarden-compatible password vault (Rust-based)
+# - FileBrowser: Minimalist, clean web file manager and explorer
+# ==============================================================================
+
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: homelab_vaultwarden
+    restart: unless-stopped
+    ports:
+      - "${VAULTWARDEN_PORT:-8080}:80"
+    environment:
+      - WEBSOCKET_ENABLED=true
+      - SIGNUPS_ALLOWED=true
+      - ADMIN_TOKEN=${VAULTWARDEN_ADMIN_TOKEN:-}
+      - DOMAIN=http://${DOMAIN_NAME:-homelab.local}:${VAULTWARDEN_PORT:-8080}
+      - TZ=${TZ:-Etc/UTC}
+    volumes:
+      - ${DATA_DIR:-./data}/vaultwarden:/data
+    networks:
+      - homelab_net
+
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    container_name: homelab_filebrowser
+    restart: unless-stopped
+    ports:
+      - "${FILEBROWSER_PORT:-8081}:80"
+    volumes:
+      - ${DATA_DIR:-./data}/shared_storage:/srv
+      - ${DATA_DIR:-./data}/filebrowser/database.db:/database/filebrowser.db
+      - ./config/filebrowser/settings.json:/.filebrowser.json:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-Etc/UTC}
+    networks:
+      - homelab_net
+
+networks:
+  homelab_net:
+    external: true

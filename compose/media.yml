@@ -1,0 +1,48 @@
+# ==============================================================================
+# Homelab Stack: Media & Streaming
+# ==============================================================================
+# Services:
+# - Jellyfin: Self-hosted open-source media streaming server
+# - qBittorrent: Clean, lightweight web torrent client
+# ==============================================================================
+
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: homelab_jellyfin
+    restart: unless-stopped
+    ports:
+      - "${JELLYFIN_PORT:-8096}:8096"
+    volumes:
+      - ${DATA_DIR:-./data}/jellyfin/config:/config
+      - ${DATA_DIR:-./data}/jellyfin/cache:/cache
+      - ${DATA_DIR:-./data}/media:/media
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-Etc/UTC}
+    networks:
+      - homelab_net
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: homelab_qbittorrent
+    restart: unless-stopped
+    ports:
+      - "8082:8080"
+      - "6881:6881"
+      - "6881:6881/udp"
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-Etc/UTC}
+      - WEBUI_PORT=8080
+    volumes:
+      - ${DATA_DIR:-./data}/qbittorrent/config:/config
+      - ${DATA_DIR:-./data}/media/downloads:/downloads
+    networks:
+      - homelab_net
+
+networks:
+  homelab_net:
+    external: true

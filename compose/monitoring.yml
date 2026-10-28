@@ -1,0 +1,41 @@
+# ==============================================================================
+# Homelab Stack: Monitoring & Health Observability
+# ==============================================================================
+# Services:
+# - Uptime Kuma: Intuitive uptime, HTTP/ping, SSL, and status page monitor
+# - Glances: Real-time host and container performance monitor
+# ==============================================================================
+
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    container_name: homelab_uptime_kuma
+    restart: unless-stopped
+    ports:
+      - "${UPTIME_KUMA_PORT:-3002}:3001"
+    volumes:
+      - ${DATA_DIR:-./data}/uptime-kuma:/app/data
+    environment:
+      - TZ=${TZ:-Etc/UTC}
+    networks:
+      - homelab_net
+
+  glances:
+    image: nicolargo/glances:latest-full
+    container_name: homelab_glances
+    restart: unless-stopped
+    pid: host
+    ports:
+      - "${GLANCES_PORT:-61208}:61208"
+    environment:
+      - GLANCES_OPT=-w
+      - TZ=${TZ:-Etc/UTC}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /run/user/1000/podman/podman.sock:/run/user/1000/podman/podman.sock:ro
+    networks:
+      - homelab_net
+
+networks:
+  homelab_net:
+    external: true

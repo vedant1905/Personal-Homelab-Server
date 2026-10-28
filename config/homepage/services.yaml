@@ -1,0 +1,54 @@
+# ==============================================================================
+# Homepage Dashboard - Services
+# ==============================================================================
+- Core & Management:
+    - Dockge:
+        icon: dockge.png
+        href: http://dockge.homelab.local:5001
+        description: Docker Compose Stack Manager
+        container: homelab_dockge
+    - Caddy:
+        icon: caddy.png
+        href: http://homelab.local
+        description: Reverse Proxy & HTTPS Router
+        container: homelab_caddy
+    - Watchtower:
+        icon: watchtower.png
+        description: Automatic Container Updater
+        container: homelab_watchtower
+
+- Network & Security:
+    - AdGuard Home:
+        icon: adguard-home.png
+        href: http://adguard.homelab.local:3001
+        description: DNS & Ad-blocker
+        container: homelab_adguard
+    - Uptime Kuma:
+        icon: uptime-kuma.png
+        href: http://uptime.homelab.local:3002
+        description: Service Uptime & Status Monitoring
+        container: homelab_uptime_kuma
+
+- Storage & Vault:
+    - Vaultwarden:
+        icon: vaultwarden.png
+        href: http://vault.homelab.local:8080
+        description: Encrypted Password & Secret Manager
+        container: homelab_vaultwarden
+    - FileBrowser:
+        icon: filebrowser.png
+        href: http://files.homelab.local:8081
+        description: Web File Manager & Cloud Storage
+        container: homelab_filebrowser
+
+- Media & Streaming:
+    - Jellyfin:
+        icon: jellyfin.png
+        href: http://media.homelab.local:8096
+        description: Personal Media Streaming Server
+        container: homelab_jellyfin
+    - qBittorrent:
+        icon: qbittorrent.png
+        href: http://homelab.local:8082
+        description: Web Torrent Client
+        container: homelab_qbittorrent
